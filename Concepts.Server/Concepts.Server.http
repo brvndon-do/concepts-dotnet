@@ -1,0 +1,6 @@
+@Concepts.Server_HostAddress = http://localhost:5128
+
+GET {{Concepts.Server_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
