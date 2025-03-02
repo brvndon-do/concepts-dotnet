@@ -1,7 +1,11 @@
+using Concepts.Server.Services.OpenAi;
+
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
+
+builder.Services.AddScoped<IOpenAiService>(); // TODO: include concrete class
 
 WebApplication app = builder.Build();
 
