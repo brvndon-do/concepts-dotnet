@@ -1,3 +1,4 @@
-@Server_HostAddress = https://localhost:7230
+@Server_HostAddress = http://localhost:5000
 
-GET {{Server_HostAddress}}/api/query/ping
+// Query Controller
+GET {{Server_HostAddress}}/api/query

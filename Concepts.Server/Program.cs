@@ -5,7 +5,9 @@ WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 
-builder.Services.AddScoped<IOpenAiService>(); // TODO: include concrete class
+builder.Services.Configure<OpenAiOptions>(builder.Configuration.GetSection("OpenAi"));
+
+builder.Services.AddScoped<IOpenAiService, OpenAiService>();
 
 WebApplication app = builder.Build();
 

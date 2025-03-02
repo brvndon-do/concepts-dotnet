@@ -14,7 +14,12 @@ public class QueryController(
     public ActionResult GetPing() => Ok("Pong!");
 
     [HttpGet]
-    public ActionResult GetRandomConceptAsync() => throw new NotImplementedException();
+    public async Task<IActionResult> GetRandomConceptAsync()
+    {
+        await _openAiService.RequestQueryAsync(string.Empty);
+
+        return Ok();
+    }
 
     [HttpPost]
     public ActionResult AddTopicAsync([FromBody] string topic) => throw new NotImplementedException();
