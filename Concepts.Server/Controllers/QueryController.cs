@@ -1,3 +1,4 @@
+using Concepts.Server.Models;
 using Concepts.Server.Services.OpenAi;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,11 +15,11 @@ public class QueryController(
     public ActionResult GetPing() => Ok("Pong!");
 
     [HttpGet]
-    public async Task<IActionResult> GetRandomConceptAsync()
+    public async Task<ActionResult<ConceptDto>> GetRandomConceptAsync()
     {
-        await _openAiService.RequestQueryAsync(string.Empty);
+        ConceptDto dto = await _openAiService.RequestConceptAsync("multithreading");
 
-        return Ok();
+        return Ok(dto);
     }
 
     [HttpPost]

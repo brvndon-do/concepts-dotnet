@@ -1,4 +1,5 @@
 
+using Concepts.Server.Models;
 using Microsoft.Extensions.Options;
 using OpenAI;
 using OpenAI.Chat;
@@ -17,17 +18,26 @@ public class OpenAiService : IOpenAiService
 
     }
 
-    public async Task RequestQueryAsync(string topic)
+    public async Task<ConceptDto> RequestConceptAsync(string topic)
     {
         List<Message> messages = new List<Message>
         {
-            new Message(Role.User, "Can you say 'Hello, world!' in Korean?"),
+            new Message(Role.System, Prompts.SystemPrompt),
+            new Message(Role.User, topic),
         };
 
-        ChatRequest request = new ChatRequest(messages);
+        ChatRequest request = new ChatRequest(
+            messages: messages,
+            model: "gpt-4o-mini"
+        );
         ChatResponse response = await _openAiClient.ChatEndpoint.GetCompletionAsync(request);
         Choice choice = response.FirstChoice;
 
-        Console.WriteLine($"***[{choice.Index}] {choice.Message.Role}: {choice.Message} | Finish Reason: {choice.FinishReason} ***");
+        return new ConceptDto
+        {
+            Topic = topic,
+            Message = choice.Message,
+            Timestamp = DateTimeOffset.FromUnixTimeSeconds(response.CreatedAtUnixTimeSeconds),
+        };
     }
 }

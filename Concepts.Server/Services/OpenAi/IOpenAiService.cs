@@ -1,6 +1,8 @@
+using Concepts.Server.Models;
+
 namespace Concepts.Server.Services.OpenAi;
 
 public interface IOpenAiService
 {
-    Task RequestQueryAsync(string topic);
+    Task<ConceptDto> RequestConceptAsync(string topic);
 }
