@@ -1,4 +1,4 @@
 @Server_HostAddress = http://localhost:5000
 
 // Query Controller
-GET {{Server_HostAddress}}/api/query
+GET {{Server_HostAddress}}/api/query?topic=dijkstra's algorithm

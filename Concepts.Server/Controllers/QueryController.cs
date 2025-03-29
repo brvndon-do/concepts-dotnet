@@ -11,17 +11,6 @@ public class QueryController(
 {
     IOpenAiService _openAiService = openAiService;
 
-    [HttpGet("ping")]
-    public ActionResult GetPing() => Ok("Pong!");
-
     [HttpGet]
-    public async Task<ActionResult<ConceptDto>> GetRandomConceptAsync()
-    {
-        ConceptDto dto = await _openAiService.RequestConceptAsync("multithreading");
-
-        return Ok(dto);
-    }
-
-    [HttpPost]
-    public ActionResult AddTopicAsync([FromBody] string topic) => throw new NotImplementedException();
+    public async Task<ActionResult<ConceptDto>> GetRandomConceptAsync([FromQuery] string topic) => Ok(await _openAiService.RequestConceptAsync(topic));
 }
