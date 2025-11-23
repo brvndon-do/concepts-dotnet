@@ -8,6 +8,10 @@ using Concepts.Bot.Services.Query;
 
 HostApplicationBuilder builder = Host.CreateApplicationBuilder(args);
 
+builder.Configuration
+    .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+    .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true);
+
 builder.Configuration.AddUserSecrets<Program>();
 
 builder.Services.Configure<NetCordOptions>(builder.Configuration.GetSection("Discord"));

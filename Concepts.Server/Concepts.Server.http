@@ -1,4 +1,9 @@
-@Server_HostAddress = http://localhost:5000
+@Server_HostAddress = https://localhost:7230
 
 // Query Controller
-GET {{Server_HostAddress}}/api/query?topic=dijkstra's algorithm
+
+### Get Concept
+GET {{Server_HostAddress}}/api/query?topic=cpu scheduler
+
+### Get Concept (streamed)
+GET {{Server_HostAddress}}/api/query/stream?topic=cpu scheduler

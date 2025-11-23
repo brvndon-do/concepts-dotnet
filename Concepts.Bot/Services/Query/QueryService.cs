@@ -18,10 +18,13 @@ public class QueryService(IHttpClientFactory httpClientFactory, IOptions<QueryOp
             $"{_options.BaseUri}/api/query?topic={topic}"
         );
 
-        ConceptDto? dto = await httpClient.GetFromJsonAsync<ConceptDto>(
-            $"{_options.BaseUri}/api/query?topic={topic}"
-        );
+        HttpResponseMessage responseMessage = await httpClient.SendAsync(requestMessage);
 
-        return dto ?? throw new Exception("Error retrieving a response from server");
+        if (!responseMessage.IsSuccessStatusCode)
+            throw new Exception("Error retrieving a response from server");
+
+        ConceptDto? dto = await responseMessage.Content.ReadFromJsonAsync<ConceptDto>();
+
+        return dto ?? throw new Exception("Error parsing response");
     }
 }

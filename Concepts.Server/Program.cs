@@ -1,5 +1,4 @@
 using Concepts.Server.Services.OpenAi;
-using OpenAI;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -8,9 +7,7 @@ builder.Services.AddOpenApi();
 
 builder.Services.Configure<OpenAiOptions>(builder.Configuration.GetSection("OpenAi"));
 
-builder.Services.AddHttpClient<OpenAIClient>();
-
-builder.Services.AddScoped<IOpenAiService, OpenAiService>();
+builder.Services.AddSingleton<IOpenAiService, OpenAiService>();
 
 WebApplication app = builder.Build();
 

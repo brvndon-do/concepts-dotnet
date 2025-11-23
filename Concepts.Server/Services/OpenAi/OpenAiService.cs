@@ -1,4 +1,4 @@
-
+using System.ClientModel;
 using Concepts.Server.Models;
 using Microsoft.Extensions.Options;
 using OpenAI;
@@ -9,35 +9,50 @@ namespace Concepts.Server.Services.OpenAi;
 public class OpenAiService : IOpenAiService
 {
     private readonly OpenAiOptions _options;
-    private readonly OpenAIClient _openAiClient;
+    private readonly ChatClient _chatClient;
 
     public OpenAiService(IOptions<OpenAiOptions> options)
     {
         _options = options.Value;
-        _openAiClient = new OpenAIClient(new OpenAIAuthentication(_options.ApiKey));
 
+        OpenAIClient openAiClient = new OpenAIClient(_options.ApiKey);
+        _chatClient = openAiClient.GetChatClient(_options.Model);
     }
 
     public async Task<ConceptDto> RequestConceptAsync(string topic)
     {
-        List<Message> messages = new List<Message>
+        List<ChatMessage> messages = new List<ChatMessage>
         {
-            new Message(Role.System, Prompts.SystemPrompt),
-            new Message(Role.User, topic),
+            ChatMessage.CreateSystemMessage(Prompts.SystemPrompt),
+            ChatMessage.CreateUserMessage(topic)
         };
 
-        ChatRequest request = new ChatRequest(
-            messages: messages,
-            model: "gpt-4o-mini"
-        );
-        ChatResponse response = await _openAiClient.ChatEndpoint.GetCompletionAsync(request);
-        Choice choice = response.FirstChoice;
+        ChatCompletion completion = await _chatClient.CompleteChatAsync(messages);
 
         return new ConceptDto
         {
             Topic = topic,
-            Message = choice.Message,
-            Timestamp = DateTimeOffset.FromUnixTimeSeconds(response.CreatedAtUnixTimeSeconds),
+            Message = completion.Content.First().Text,
+            Timestamp = completion.CreatedAt,
         };
+    }
+
+    public async IAsyncEnumerable<string> RequestConceptStreamAsync(string topic)
+    {
+        List<ChatMessage> messages = new List<ChatMessage>
+        {
+            ChatMessage.CreateSystemMessage(Prompts.SystemPrompt),
+            ChatMessage.CreateUserMessage(topic)
+        };
+
+        AsyncCollectionResult<StreamingChatCompletionUpdate> completionUpdates = _chatClient.CompleteChatStreamingAsync(messages);
+
+        await foreach (StreamingChatCompletionUpdate update in completionUpdates)
+        {
+            if (update.ContentUpdate.Count > 0)
+            {
+                yield return update.ContentUpdate.First().Text;
+            }
+        }
     }
 }
