@@ -9,7 +9,7 @@ public class QueryController(
     IOpenAiService openAiService
 ) : ControllerBase
 {
-    IOpenAiService _openAiService = openAiService;
+    private readonly IOpenAiService _openAiService = openAiService;
 
     [HttpGet]
     public async Task<ConceptDto> GetConceptAsync([FromQuery] string topic) => await _openAiService.RequestConceptAsync(topic);

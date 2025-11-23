@@ -2,5 +2,6 @@ namespace Concepts.Server.Services.OpenAi;
 
 public static class Prompts
 {
-    public const string SystemPrompt = "You will be given a computer science topic, and your task is to explain the given topic to the user in an easy-to-understand and digestable language. Do not include any follow up messages.";
+    public const string SYSTEM_PROMPT = "You are a computer science professor. Provide an explanation in a few paragraphs under 2000 characters. Avoid giving code examples and do not prompt the user any further questions.";
+    public static string FormatUserPrompt(string topic) => $"Explain {topic}";
 }

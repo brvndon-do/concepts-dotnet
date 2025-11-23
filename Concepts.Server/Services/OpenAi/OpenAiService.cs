@@ -23,11 +23,14 @@ public class OpenAiService : IOpenAiService
     {
         List<ChatMessage> messages = new List<ChatMessage>
         {
-            ChatMessage.CreateSystemMessage(Prompts.SystemPrompt),
-            ChatMessage.CreateUserMessage(topic)
+            ChatMessage.CreateSystemMessage(Prompts.SYSTEM_PROMPT),
+            ChatMessage.CreateUserMessage(Prompts.FormatUserPrompt(topic))
         };
 
         ChatCompletion completion = await _chatClient.CompleteChatAsync(messages);
+
+        if (completion.Content.Count < 0)
+            throw new Exception("Unexpected response with no content");
 
         return new ConceptDto
         {
@@ -41,8 +44,8 @@ public class OpenAiService : IOpenAiService
     {
         List<ChatMessage> messages = new List<ChatMessage>
         {
-            ChatMessage.CreateSystemMessage(Prompts.SystemPrompt),
-            ChatMessage.CreateUserMessage(topic)
+            ChatMessage.CreateSystemMessage(Prompts.SYSTEM_PROMPT),
+            ChatMessage.CreateUserMessage(Prompts.FormatUserPrompt(topic))
         };
 
         AsyncCollectionResult<StreamingChatCompletionUpdate> completionUpdates = _chatClient.CompleteChatStreamingAsync(messages);

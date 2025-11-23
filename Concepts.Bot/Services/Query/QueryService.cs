@@ -4,27 +4,23 @@ using Microsoft.Extensions.Options;
 
 namespace Concepts.Bot.Services.Query;
 
-public class QueryService(IHttpClientFactory httpClientFactory, IOptions<QueryOptions> options) : IQueryService
+public class QueryService(HttpClient httpClient, IOptions<QueryOptions> options) : IQueryService
 {
-    private readonly IHttpClientFactory _httpClientFactory = httpClientFactory;
+    private readonly HttpClient _httpClient = httpClient;
     private readonly QueryOptions _options = options.Value;
 
     public async Task<ConceptDto> GetConceptAsync(string topic)
     {
-        using HttpClient httpClient = _httpClientFactory.CreateClient();
-
         HttpRequestMessage requestMessage = new HttpRequestMessage(
             HttpMethod.Get,
-            $"{_options.BaseUri}/api/query?topic={topic}"
+            $"{_options.BaseUri}/api/query?topic={Uri.EscapeDataString(topic)}"
         );
 
-        HttpResponseMessage responseMessage = await httpClient.SendAsync(requestMessage);
+        HttpResponseMessage responseMessage = await _httpClient.SendAsync(requestMessage);
 
         if (!responseMessage.IsSuccessStatusCode)
             throw new Exception("Error retrieving a response from server");
 
-        ConceptDto? dto = await responseMessage.Content.ReadFromJsonAsync<ConceptDto>();
-
-        return dto ?? throw new Exception("Error parsing response");
+        return await responseMessage.Content.ReadFromJsonAsync<ConceptDto>() ?? throw new Exception("Error parsing response");
     }
 }
