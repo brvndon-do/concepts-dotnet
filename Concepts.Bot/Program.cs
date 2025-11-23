@@ -5,10 +5,10 @@ using NetCord.Hosting.Gateway;
 using NetCord.Hosting.Services.ApplicationCommands;
 using Concepts.Bot.Services.NetCord;
 using Concepts.Bot.Services.Query;
-using NetCord.Hosting.Services.Commands;
 
 HostApplicationBuilder builder = Host.CreateApplicationBuilder(args);
 
+// TODO: has to be a better way of binding these configs..
 builder.Configuration
     .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
     .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true);

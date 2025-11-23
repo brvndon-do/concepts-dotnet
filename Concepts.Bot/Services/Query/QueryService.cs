@@ -15,6 +15,7 @@ public class QueryService(HttpClient httpClient, IOptions<QueryOptions> options)
             HttpMethod.Get,
             $"{_options.BaseUri}/api/query?topic={Uri.EscapeDataString(topic)}"
         );
+        requestMessage.Headers.Add(_options.HeaderKeyName, _options.SecretKey);
 
         HttpResponseMessage responseMessage = await _httpClient.SendAsync(requestMessage);
 

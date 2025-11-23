@@ -24,6 +24,7 @@ public class OpenAiService : IOpenAiService
         List<ChatMessage> messages = new List<ChatMessage>
         {
             ChatMessage.CreateSystemMessage(Prompts.SYSTEM_PROMPT),
+            ChatMessage.CreateSystemMessage(Prompts.SYSTEM_PROMPT_FOLLOWUP),
             ChatMessage.CreateUserMessage(Prompts.FormatUserPrompt(topic))
         };
 
@@ -45,6 +46,7 @@ public class OpenAiService : IOpenAiService
         List<ChatMessage> messages = new List<ChatMessage>
         {
             ChatMessage.CreateSystemMessage(Prompts.SYSTEM_PROMPT),
+            ChatMessage.CreateSystemMessage(Prompts.SYSTEM_PROMPT_FOLLOWUP),
             ChatMessage.CreateUserMessage(Prompts.FormatUserPrompt(topic))
         };
 

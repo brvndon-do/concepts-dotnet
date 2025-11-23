@@ -1,6 +1,6 @@
 # Concepts
 
-Discord bot that'll post daily concepts related to Computer Science.
+Discord bot that'll post daily concepts related to computer science.
 
 # Getting started
 

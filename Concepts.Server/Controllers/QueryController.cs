@@ -1,10 +1,11 @@
 using Concepts.Server.Models;
 using Concepts.Server.Services.OpenAi;
+using Concepts.Server.Utilities.AuthenticatedRequest;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Concepts.Server.Controllers;
 
-[ApiController, Route("api/query")]
+[AuthenticatedRequest, ApiController, Route("api/query")]
 public class QueryController(
     IOpenAiService openAiService
 ) : ControllerBase

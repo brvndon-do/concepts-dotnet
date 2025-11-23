@@ -35,12 +35,7 @@ public class QueryModule(
                     Description = conceptDto.Message,
                     Timestamp = conceptDto.Timestamp
                 }
-            ],
-            AllowedMentions = new AllowedMentionsProperties
-            {
-                AllowedUsers = [Context.User.Id],
-                ReplyMention = true
-            }
+            ]
         };
 
         await Context.Interaction.SendFollowupMessageAsync(message);
